@@ -17,36 +17,39 @@ public class Main {
             System.out.println("4. Return Car");
             System.out.println("5. Delete Car");
             System.out.println("6. Exit");
-            System.out.print("Enter choice: ");
-            
-            int choice = InputValidator.readInt(sc, "");
+
+            int choice = InputValidator.readInt(sc, "Enter choice: ", 1, 6);
 
             switch (choice) {
                 case 1 -> {
-                    int id = InputValidator.readInt(sc, "Enter Car ID: ");
-                    String brand = InputValidator.readNonEmptyString(sc, "Enter Car Brand: ");
-                    String model = InputValidator.readNonEmptyString(sc, "Enter Car Model: ");
+                    int id = InputValidator.readInt(sc, "Enter Car ID (1-9999): ", 1, 9999);
+                    String brand = InputValidator.readValidatedString(sc, "Enter Car Brand: ", 30);
+                    String model = InputValidator.readValidatedString(sc, "Enter Car Model: ", 30);
                     carService.addCar(id, brand, model);
                 }
                 case 2 -> carService.viewCars();
                 case 3 -> {
-                    int id = InputValidator.readInt(sc, "Enter Car ID to Rent: ");
+                    int id = InputValidator.readInt(sc, "Enter Car ID to Rent: ", 1, 9999);
                     carService.rentCar(id);
                 }
                 case 4 -> {
-                    int id = InputValidator.readInt(sc, "Enter Car ID to Return: ");
+                    int id = InputValidator.readInt(sc, "Enter Car ID to Return: ", 1, 9999);
                     carService.returnCar(id);
                 }
                 case 5 -> {
-                    int id = InputValidator.readInt(sc, "Enter Car ID to Delete: ");
-                    carService.deleteCar(id);
+                    int id = InputValidator.readInt(sc, "Enter Car ID to Delete: ", 1, 9999);
+                    boolean confirmDelete = InputValidator.confirmYesNo(sc, "Are you sure you want to delete this car?");
+                    if (confirmDelete) {
+                        carService.deleteCar(id);
+                    } else {
+                        System.out.println("Delete action canceled.");
+                    }
                 }
                 case 6 -> {
                     System.out.println("Exiting... Thank you!");
                     sc.close();
                     return;
                 }
-                default -> System.out.println("Invalid choice.");
             }
         }
     }
